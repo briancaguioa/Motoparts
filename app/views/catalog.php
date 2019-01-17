@@ -2,11 +2,12 @@
 
 <?php require_once '../partials/template.php'; ?>
 
-<?php function get_page_content() { ?>
+<?php function get_page_content() { 
+	if(!isset($_SESSION['user']) || (isset($_SESSION['user'])) && $_SESSION['user']['roles_id'] == 2) {
+?>
 
 <?php  require_once '../controller/connect.php'; 
 		global $conn;
-	
 ?>
 
 <div class="container-fluid">
@@ -64,7 +65,7 @@
 						$sql2 .= " " . $_SESSION['sort'];
 					}
 
-					var_dump($sql2);
+					// var_dump($sql2);
 
 					$items = mysqli_query($conn, $sql2);
 
@@ -103,7 +104,9 @@
 
 
 	<!-- // mysqli_close($conn); -->
-
+<?php } else {
+	header('Location: ./error.php');
+} ?>
 
 
 <?php } ?>

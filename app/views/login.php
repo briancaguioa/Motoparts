@@ -15,13 +15,13 @@
 		<form>
 			<div class="form-group">
 				<label for="username">Username</label>
-				<input type="text" name="username" class="form-control" placeholder="enter username">
+				<input id="username" type="text" name="username" class="form-control" placeholder="enter username">
 				<span class="validation"></span>
 			</div>
 
 			<div class="form-group">
 				<label for="password">Password</label>
-				<input type="password" name="password" class="form-control" placeholder="enter password">
+				<input id="password" type="password" name="password" class="form-control" placeholder="enter password">
 				<span class="validation"></span>
 			</div>
 
