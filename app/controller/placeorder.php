@@ -163,8 +163,8 @@ function generate_new_transaction_number() {
 
 	    $redirectUrls = new RedirectUrls();
 	    $redirectUrls
-	        ->setReturnUrl('https://motoparts19.herokuapp.com/app/views/home.php?success=true')
-	        ->setCancelUrl('https://motoparts19.herokuapp.com/app/views/home.php?success=false');
+	        ->setReturnUrl('https://motoparts19.herokuapp.com/app/controller/pay.php?success=true')
+	        ->setCancelUrl('https://motoparts19.herokuapp.com/app/controller/pay.php?success=false');
 
 	    $payment = new Payment();
 	    $payment->setIntent('sale')
