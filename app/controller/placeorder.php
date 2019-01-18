@@ -163,8 +163,8 @@ function generate_new_transaction_number() {
 
 	    $redirectUrls = new RedirectUrls();
 	    $redirectUrls
-	        ->setReturnUrl('http://192.168.10.13/batch19/kaintayo/app/controller/pay.php?success=true')
-	        ->setCancelUrl('http://192.168.10.13/batch19/kaintayo/app/controller/pay.php?success=false');
+	        ->setReturnUrl('https://motoparts19.herokuapp.com/app/views/home.php?success=true')
+	        ->setCancelUrl('https://motoparts19.herokuapp.com/app/views/home.php?success=false');
 
 	    $payment = new Payment();
 	    $payment->setIntent('sale')
