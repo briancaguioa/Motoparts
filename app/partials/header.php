@@ -37,6 +37,15 @@
         <li class="nav-item">
           <a href="./items.php" class="nav-link">Items</a>
         </li>
+
+         <li class="nav-item">
+          <a class="nav-link" href="../views/orders.php"> Orders </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="../views/users.php"> Users </a>
+        </li>
+
       <?php }; ?>
 
 
