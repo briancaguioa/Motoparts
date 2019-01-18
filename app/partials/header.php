@@ -1,6 +1,6 @@
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <a class="navbar-brand" href="#">
-      <i class="far fa-hand-peace"></i> Motoparts Store
+      <i class="fas fa-motorcycle"></i> Motoparts
     </a>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-nav">
@@ -14,7 +14,7 @@
         ?>
 
         <li class="nav-item">
-          <a class="nav-link" href="./home.php"> Home </a>
+          <a class="nav-link" href="./home.php"> <i class="fas fa-home"></i> Home </a>
         </li>
 
         <li class="nav-item">
@@ -22,7 +22,7 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="./cart.php"> Cart <span class="badge bg-light text-dark" id="cart-count">
+          <a class="nav-link" href="./cart.php"> <i class="fas fa-shopping-cart"></i> Cart <span class="badge bg-light text-dark" id="cart-count">
             <?php
               if (isset($_SESSION['cart'])) {
                 echo array_sum($_SESSION['cart']);
@@ -58,7 +58,7 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="../controller/logout.php"> Logout </a>
+          <a class="nav-link" href="../controller/logout.php"> <i class="fas fa-sign-out-alt"></i> Logout </a>
         </li>
 
         <?php } else { ?>
