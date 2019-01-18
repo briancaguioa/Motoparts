@@ -2,7 +2,6 @@
 
 session_start();
 require_once './connect.php';
-
 //Load Composer's autoloader
 require '../../vendor/autoload.php';
 // Import PHPMailer classes into the global namespace
@@ -38,8 +37,8 @@ function generate_new_transaction_number() {
 	}
 
 	$today = getdate();
-	return $ref_number.'-'.$today[0]; //seconds since Unix Epoch
-}
+	return $ref_number.' - '.$today[0]; //seconds since Unix Epoch
+	}
 
 	//get all the details of the order
 	$user_id = $_SESSION['user']['id'];
@@ -50,36 +49,35 @@ function generate_new_transaction_number() {
 
 	if($payment_mode_id == 1) {
 
-		$transaction_number = generate_new_transaction_number();
-		$_SESSION['new_txn_number'] = $transaction_number;
+	$transaction_number = generate_new_transaction_number();
+	$_SESSION['new_txn_number'] = $transaction_number;
 
-		//create a new order
-		$sql = "INSERT INTO orders(user_id, transaction_code, purchase_date, status_id, payment_mode_id) VALUES ('$user_id', '$transaction_number', '$purchase_date', '$status_id', '$payment_mode_id'); ";
+	//create a new order
+	$sql = "INSERT INTO orders(user_id, transaction_code, purchase_date, status_id, payment_mode_id) VALUES ('$user_id', '$transaction_number', '$purchase_date', '$status_id', '$payment_mode_id'); ";
 
 
-		$result = mysqli_query($conn, $sql);
-		// var_dump($conn);
+	$result = mysqli_query($conn, $sql);
+	// var_dump($conn);
 
-		//get the latest order ID to associate items for orders_items table
-		$new_order_id = mysqli_insert_id($conn);
+	//get the latest order ID to associate items for orders_items table
+	$new_order_id = mysqli_insert_id($conn);
 
-		//if order was created
-		if ($result) {
-			//loop throught the items inside session cart
-			foreach($_SESSION['cart'] as $item_id => $qty) {
-				//get the price of the current item
-				$sql = "SELECT price FROM items WHERE id ='$item_id' ";
-				$result = mysqli_query($conn,$sql);
-				// var_dump($sql);
+	//if order was created
+	if ($result) {
+		//loop throught the items inside session cart
+		foreach($_SESSION['cart'] as $item_id => $qty) {
+			//get the price of the current item
+			$sql = "SELECT price FROM items WHERE id ='$item_id'";
+			$result = mysqli_query($conn,$sql);
 
-				//fetch the data from the query
-				$item = mysqli_fetch_assoc($result);
+			//fetch the data from the query
+			$item = mysqli_fetch_assoc($result);
 
-				//create a new order item
-				$sql = "INSERT INTO order_items (order_id, item_id, quantity, price) VALUES ('$new_order_id', '$item_id', '$qty', '".$item['price']." ')";
+			//create a new order item
+			$sql = "INSERT INTO order_items (order_id, item_id, quantity, price) VALUES ('$new_order_id', '$item_id', '$qty', '".$item['price']." ')";
 
-				//execute the order item query
-				$result = mysqli_query($conn,$sql);
+			//execute the order item query
+			$result = mysqli_query($conn,$sql);
 
 			}
 		}
@@ -90,17 +88,13 @@ function generate_new_transaction_number() {
 		// Send email notification to customer
 		// ==============================================================================
 
-
-
-
 		$mail = new PHPMailer(true); 
-		// Passing `true` enables exceptions
+		// Passing true enables exceptions
 
-
-		$staff_email = 'partengmotor@gmail.com';
+		$staff_email = 'your.toe.mate.toes@gmail.com';
 		$customer_email = $_SESSION['user']['email'];          //
-		$subject = ' - motoparts Confirmation';
-		$body = '<div style="text-transform:uppercase;"><h3>Reference No.: '.$transaction_number.'</h3></div>'."<div>Ship to $address</div>";
+		$subject = 'YourToeMateToes - Order Confirmation';
+		$body = '<div style="text-transform:uppercase;"><h3>We appreciate your business with us. This is your Reference No.: '.$transaction_number.'</h3></div>'."<div>Ship to $address</div>";
 		try {
 		    //Server settings
 		    $mail->SMTPDebug = 4;                                 // Enable verbose debug output
@@ -108,12 +102,12 @@ function generate_new_transaction_number() {
 		    $mail->Host = 'smtp.gmail.com';                       // Specify main and backup SMTP servers
 		    $mail->SMTPAuth = true;                               // Enable SMTP authentication
 		    $mail->Username = $staff_email;                       // SMTP username
-		    $mail->Password = 'motoparts123';                     // SMTP password
-		    $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+		    $mail->Password = 'myshoeshop';                     // SMTP password
+		    $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, ssl also accepted
 		    $mail->Port = 587;                                    // TCP port to connect to
 
 		    //Recipients
-		    $mail->setFrom($staff_email, 'kaintayo');
+		    $mail->setFrom($staff_email, 'Motoparts');
 		    $mail->addAddress($customer_email);  // Name is optional
 
 		    //Content
@@ -131,62 +125,61 @@ function generate_new_transaction_number() {
 		    echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
 		}
 
-
 			mysqli_close($conn);
 
-	} else {
-    $_SESSION['address'] = $_POST['addressLine1'];
-    $payer = new Payer();
-    $payer->setPaymentMethod('paypal');
+		} else {
+	    $_SESSION['address'] = $_POST['addressLine1'];
+	    $payer = new Payer();
+	    $payer->setPaymentMethod('paypal');
 
-    $total = 0;
-    $items = [];
-    foreach($_SESSION['cart'] as $id => $quantity){
-        $sql = "SELECT * FROM items WHERE id =$id";
-        $result = mysqli_query($conn, $sql);
-        $item = mysqli_fetch_assoc($result);
-        extract($item);
-        $total += $price*$quantity;
-        $indiv_item = new Item();
-        $indiv_item->setName($name)
-                ->setCurrency('PHP')
-                ->setQuantity($quantity)
-                ->setPrice($price);
-        $items[] = $indiv_item;        
-    }
+	    $total = 0;
+	    $items = [];
+	    foreach($_SESSION['cart'] as $id => $quantity){
+	        $sql = "SELECT * FROM items WHERE id =$id";
+	        $result = mysqli_query($conn, $sql);
+	        $item = mysqli_fetch_assoc($result);
+	        extract($item);
+	        $total += $price*$quantity;
+	        $indiv_item = new Item();
+	        $indiv_item->setName($name)
+	                ->setCurrency('PHP')
+	                ->setQuantity($quantity)
+	                ->setPrice($price);
+	        $items[] = $indiv_item;        
+	    }
 
-    $item_list = new ItemList();
-    $item_list->setItems($items);
+	    $item_list = new ItemList();
+	    $item_list->setItems($items);
 
-    $amount = new Amount();
-    $amount->setCurrency("PHP")
-        ->setTotal($total);
+	    $amount = new Amount();
+	    $amount->setCurrency("PHP")
+	        ->setTotal($total);
 
-    $transaction = new Transaction();
-    $transaction ->setAmount($amount)
-                ->setItemList($item_list)
-                ->setDescription('Payment for Motoparts Purchase')
-                ->setInvoiceNumber(uniqid("Motoparts"));
+	    $transaction = new Transaction();
+	    $transaction ->setAmount($amount)
+	                ->setItemList($item_list)
+	                ->setDescription('Payment for YourToeMateToes Purchase')
+	                ->setInvoiceNumber(uniqid("YourToeMateToes_"));
 
-    $redirectUrls = new RedirectUrls();
-    $redirectUrls
-        ->setReturnUrl('http://localhost:3306/controller/pay.php?success=true')
-        ->setCancelUrl('http://localhost:3306/controller/pay.php?success=false');
+	    $redirectUrls = new RedirectUrls();
+	    $redirectUrls
+	        ->setReturnUrl('http://192.168.10.13/batch19/kaintayo/app/controller/pay.php?success=true')
+	        ->setCancelUrl('http://192.168.10.13/batch19/kaintayo/app/controller/pay.php?success=false');
 
-	$payment = new Payment();
-	$payment->setIntent('sale')
-	    ->setPayer($payer)
-	    ->setRedirectUrls($redirectUrls)
-	    ->setTransactions([$transaction]);
+	    $payment = new Payment();
+	    $payment->setIntent('sale')
+	        ->setPayer($payer)
+	        ->setRedirectUrls($redirectUrls)
+	        ->setTransactions([$transaction]);
 
-    try{
-        $payment->create($paypal);
-    } catch(Exception $e){
-        die($e->getData());
-    }
+	    try{
+	        $payment->create($paypal);
+	    } catch(Exception $e){
+	        die($e->getData());
+	    }
 
-    $approvalUrl = $payment->getApprovalLink();
-    header('location: '.$approvalUrl);    
+	    $approvalUrl = $payment->getApprovalLink();
+	    header('location: '.$approvalUrl);    
 	}
 
  ?>
