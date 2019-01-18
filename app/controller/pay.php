@@ -58,5 +58,5 @@ unset($_SESSION['cart']);
 unset($_SESSION['address']);
 $_SESSION['new_txn_number'] = $trans_code;
 mysqli_close($conn);
-// header('Location: ../views/confirmation.php');
+header('Location: ../views/confirmation.php');
 ?>
